@@ -8,34 +8,18 @@ from io import BytesIO
 from PyQt5.QtCore import Qt
 
 
-def get_image(toponym_lattitude, toponym_longitude, spn, l):
+def get_image(toponym_lattitude, toponym_longitude, z, l):
     map_params = {
         "ll": ','.join([toponym_lattitude, toponym_longitude]),
-        "spn": ",".join([spn, spn]),
-        "l": l, 'pt': ",".join([toponym_longitude, toponym_lattitude])
+        "z": z,
+        "l": l,
+        'pt': ",".join([toponym_lattitude, toponym_longitude])
     }
     map_api_server = "http://static-maps.yandex.ru/1.x/"
     response = requests.get(map_api_server, params=map_params)
     img = Image.open(BytesIO(
         response.content))
     img.save('1.png')
-
-
-def key_press_event(event):
-    global spn, lantitude, longitude
-    if event.key() == Qt.Key_PageUp:
-        spn += 0.0005
-    elif event.key() == Qt.Key_PageDown:
-        if spn > 0.0005:
-            spn -= 0.0005
-    elif event.key() == Qt.Key_Right:
-        longitude += spn
-    elif event.key() == Qt.Key_Left:
-        longitude += spn
-    elif event.key() == Qt.Key_Down:
-        lantitude -= spn
-    elif event.key() == Qt.Key_Up:
-        lantitude += spn
 
 
 class Maps(QMainWindow):
@@ -45,15 +29,29 @@ class Maps(QMainWindow):
 
         self.add_map()
 
+    def keyPressEvent(self, event):
+        global z, lantitude, longitude
+
+        if event.key() == Qt.Key_PageUp:
+            if z < 17:
+                z += 1
+
+        elif event.key() == Qt.Key_PageDown:
+            if z > 0:
+                z -= 1
+
+        self.add_map()
+        print(z)
+
     def add_map(self):
-        get_image('38.910410', '45.036114', '0.0005', 'map')
+        get_image(longitude, lantitude, z, 'map')
         pixmap = QPixmap('1.png')
         self.label.setPixmap(pixmap)
 
 
 if __name__ == '__main__':
-    lantitude, longitude = 45.036114, 38.910410
-    spn = 0.0005
+    lantitude, longitude = '45.036114', '38.910410'
+    z = 17
     application = QApplication(sys.argv)
     window = Maps()
     window.show()
