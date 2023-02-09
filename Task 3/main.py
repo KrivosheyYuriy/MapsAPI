@@ -41,16 +41,23 @@ class Maps(QMainWindow):
 
         elif event.key() == Qt.Key_Left:
             longitude -= 0.001
+            if longitude <= -180:
+                longitude += 360
 
         elif event.key() == Qt.Key_Right:
             longitude += 0.001
+            if longitude > 180:
+                longitude -= 360
 
         elif event.key() == Qt.Key_Down:
             lantitude -= 0.001
+            if lantitude < -90:
+                lantitude += 180
 
         elif event.key() == Qt.Key_Up:
             lantitude += 0.001
-
+            if lantitude > 90:
+                lantitude -= 180
         self.add_map()
 
     def add_map(self):
