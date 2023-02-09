@@ -7,10 +7,10 @@ from io import BytesIO
 from PyQt5.QtCore import Qt
 
 
-def get_image(toponym_longitude, toponym_lattitude, spn, l):
+def get_image(toponym_lattitude, toponym_longitude, spn, l):
     map_params = {
-        "ll": ','.join([toponym_longitude, toponym_lattitude]),
-        "spn": ",".join(spn),
+        "ll": ','.join([toponym_lattitude, toponym_longitude]),
+        "spn": ",".join([spn, spn]),
         "l": l, 'pt': ",".join([toponym_longitude, toponym_lattitude])
     }
     map_api_server = "http://static-maps.yandex.ru/1.x/"
@@ -22,7 +22,7 @@ def get_image(toponym_longitude, toponym_lattitude, spn, l):
 
 
 def key_press_event(event):
-    global spn
+    global spn, lantitude, longitude
     if event.key() == Qt.Key_PageUp:
         spn += 0.0005
     elif event.key() == Qt.Key_PageDown:
