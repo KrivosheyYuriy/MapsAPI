@@ -5,15 +5,13 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 import requests
 from PIL import Image
 from io import BytesIO
-from PyQt5.QtCore import Qt
 
 
-def get_image(toponym_lattitude, toponym_longitude, z, l):
+def get_image(toponym_lattitude, toponym_longitude, spn, l):
     map_params = {
         "ll": ','.join([toponym_lattitude, toponym_longitude]),
-        "z": z,
-        "l": l,
-        'pt': ",".join([toponym_lattitude, toponym_longitude])
+        "spn": ",".join([spn, spn]),
+        "l": l, 'pt': ",".join([toponym_longitude, toponym_lattitude])
     }
     map_api_server = "http://static-maps.yandex.ru/1.x/"
     response = requests.get(map_api_server, params=map_params)
@@ -29,29 +27,15 @@ class Maps(QMainWindow):
 
         self.add_map()
 
-    def keyPressEvent(self, event):
-        global z, lantitude, longitude
-
-        if event.key() == Qt.Key_PageUp:
-            if z < 17:
-                z += 1
-
-        elif event.key() == Qt.Key_PageDown:
-            if z > 0:
-                z -= 1
-
-        self.add_map()
-        print(z)
-
     def add_map(self):
-        get_image(longitude, lantitude, z, 'map')
+        get_image('38.910410', '45.036114', '0.0005', 'map')
         pixmap = QPixmap('1.png')
         self.label.setPixmap(pixmap)
 
 
 if __name__ == '__main__':
-    lantitude, longitude = '45.036114', '38.910410'
-    z = 17
+    lantitude, longitude = 45.036114, 38.910410
+    spn = 0.0005
     application = QApplication(sys.argv)
     window = Maps()
     window.show()
