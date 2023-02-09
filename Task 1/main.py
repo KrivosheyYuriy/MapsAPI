@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 import requests
 from PIL import Image
 from io import BytesIO
+from PyQt5.QtCore import Qt
 
 
 def get_image(toponym_lattitude, toponym_longitude, spn, l):
@@ -18,6 +19,23 @@ def get_image(toponym_lattitude, toponym_longitude, spn, l):
     img = Image.open(BytesIO(
         response.content))
     img.save('1.png')
+
+
+def key_press_event(event):
+    global spn, lantitude, longitude
+    if event.key() == Qt.Key_PageUp:
+        spn += 0.0005
+    elif event.key() == Qt.Key_PageDown:
+        if spn > 0.0005:
+            spn -= 0.0005
+    elif event.key() == Qt.Key_Right:
+        longitude += spn
+    elif event.key() == Qt.Key_Left:
+        longitude += spn
+    elif event.key() == Qt.Key_Down:
+        lantitude -= spn
+    elif event.key() == Qt.Key_Up:
+        lantitude += spn
 
 
 class Maps(QMainWindow):
