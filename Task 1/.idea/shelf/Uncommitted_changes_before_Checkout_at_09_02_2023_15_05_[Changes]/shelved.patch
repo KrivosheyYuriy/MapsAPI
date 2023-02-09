@@ -1,0 +1,50 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import sys\r\n\r\nfrom PyQt5 import uic\r\nfrom PyQt5.QtWidgets import QMainWindow, QApplication\r\nfrom PyQt5.QtCore import Qt\r\n\r\n\r\nclass Maps(QMainWindow):\r\n    def __init__(self):\r\n        super().__init__()\r\n        uic.loadUi('Maps.ui', self)\r\n\r\n    def keyPressEvent(self, event):\r\n        if event.key() == Qt.Key_PageUp:\r\n            pass  # увеличить масштаб на какое-то значение\r\n\r\n        if event.key() == Qt.Key_PageDown:\r\n            pass  # уменьшить масштаб на какое-то значение\r\n\r\n\r\nif __name__ == '__main__':\r\n    application = QApplication(sys.argv)\r\n    window = Maps()\r\n    window.show()\r\n    sys.exit(application.exec())\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	
++++ b/main.py	
+@@ -1,8 +1,23 @@
+ import sys
+-
+ from PyQt5 import uic
+ from PyQt5.QtWidgets import QMainWindow, QApplication
+-from PyQt5.QtCore import Qt
++import requests
++from PIL import Image
++from io import BytesIO
++
++
++def get_image(toponym_longitude, toponym_lattitude, spn, l):
++    map_params = {
++        "ll": ','.join([toponym_longitude, toponym_lattitude]),
++        "spn": ",".join(spn),
++        "l": l, 'pt': ",".join([toponym_longitude, toponym_lattitude])
++    }
++    map_api_server = "http://static-maps.yandex.ru/1.x/"
++    response = requests.get(map_api_server, params=map_params)
++    img = Image.open(BytesIO(
++        response.content))
++    img.show()
++    img.save('1.png')
+ 
+ 
+ class Maps(QMainWindow):
+@@ -10,13 +25,6 @@
+         super().__init__()
+         uic.loadUi('Maps.ui', self)
+ 
+-    def keyPressEvent(self, event):
+-        if event.key() == Qt.Key_PageUp:
+-            pass  # увеличить масштаб на какое-то значение
+-
+-        if event.key() == Qt.Key_PageDown:
+-            pass  # уменьшить масштаб на какое-то значение
+-
+ 
+ if __name__ == '__main__':
+     application = QApplication(sys.argv)

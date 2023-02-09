@@ -1,0 +1,67 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	
++++ b/main.py	
+@@ -1,1 +1,17 @@
++import sys
++
++from PyQt5 import uic
++from PyQt5.QtWidgets import QMainWindow, QApplication
++
++
++class Maps(QMainWindow):
++    def __init__(self):
++        super().__init__()
++        uic.loadUi('Maps.ui', self)
+ 
++
++if __name__ == '__main__':
++    application = QApplication(sys.argv)
++    window = Maps()
++    window.show()
++    sys.exit(application.exec())
+Index: Maps.ui
+===================================================================
+diff --git a/Maps.ui b/Maps.ui
+new file mode 100644
+--- /dev/null	
++++ b/Maps.ui	
+@@ -0,0 +1,32 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<ui version="4.0">
++ <class>Form</class>
++ <widget class="QWidget" name="Form">
++  <property name="geometry">
++   <rect>
++    <x>0</x>
++    <y>0</y>
++    <width>1024</width>
++    <height>768</height>
++   </rect>
++  </property>
++  <property name="windowTitle">
++   <string>Form</string>
++  </property>
++  <widget class="QLabel" name="label">
++   <property name="geometry">
++    <rect>
++     <x>10</x>
++     <y>20</y>
++     <width>600</width>
++     <height>600</height>
++    </rect>
++   </property>
++   <property name="text">
++    <string/>
++   </property>
++  </widget>
++ </widget>
++ <resources/>
++ <connections/>
++</ui>
